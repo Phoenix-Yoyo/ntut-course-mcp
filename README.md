@@ -1,3 +1,5 @@
+> ⚠️ 實驗性 AI 協作原型：大部分程式實作由 AI 依開發者提供的需求與測試情境產生。
+
 # NTUT Course MCP Server
 
 <div align="center">
