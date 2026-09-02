@@ -166,6 +166,37 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             if (!courses) return { content: [{ type: "text", text: "Data not found." }] };
             const PERIOD_TIMES: Record<string, {s: string, e: string}> = { "1": { s: "081000", e: "090000" }, "2": { s: "091000", e: "100000" }, "3": { s: "101000", e: "110000" }, "4": { s: "111000", e: "120000" }, "Z": { s: "121000", e: "130000" }, "5": { s: "131000", e: "140000" }, "6": { s: "141000", e: "150000" }, "7": { s: "151000", e: "160000" }, "8": { s: "161000", e: "170000" }, "9": { s: "171000", e: "180000" }, "A": { s: "183000", e: "192000" }, "B": { s: "192000", e: "201000" }, "C": { s: "202000", e: "211000" }, "D": { s: "211000", e: "220000" } };
             const DAY_MAP: Record<string, string> = { "sun": "SU", "mon": "MO", "tue": "TU", "wed": "WE", "thu": "TH", "fri": "FR", "sat": "SA" };
+            const now = new Date();
+            let startDateStr = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}`;
+            const baseYear = parseInt(year, 10);
+            if (!isNaN(baseYear)) {
+                let expectedStartYear = sem === "1" ? baseYear + 1911 : baseYear + 1912;
+                let expectedStartMonth = sem === "1" ? 9 : sem === "2" ? 2 : 7;
+                
+                // Approximate fallback
+                startDateStr = sem === "1" ? `${expectedStartYear}0901` : sem === "2" ? `${expectedStartYear}0201` : `${expectedStartYear}0701`;
+                
+                try {
+                    const cal = await fetchJson("/calendar.json");
+                    if (cal && Array.isArray(cal)) {
+                        const startEvents = cal.filter((e: any) => e.summary && (e.summary.includes("開學") || e.summary.includes("正式上課")));
+                        const matchedEvent = startEvents.find((e: any) => {
+                            const d = new Date(e.start);
+                            return d.getFullYear() === expectedStartYear && Math.abs((d.getMonth() + 1) - expectedStartMonth) <= 1;
+                        });
+                        if (matchedEvent) {
+                            const d = new Date(matchedEvent.start);
+                            const yyyy = d.getFullYear();
+                            const mm = String(d.getMonth() + 1).padStart(2, '0');
+                            const dd = String(d.getDate()).padStart(2, '0');
+                            startDateStr = `${yyyy}${mm}${dd}`;
+                        }
+                    }
+                } catch (e) {
+                    // Ignore calendar fetch error, keep fallback
+                }
+            }
+
             let ics = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//NTUT Course MCP//EN\nX-WR-CALDESC:NTUT course data is not licensed under this project's MIT License; verify official information with NTUT.\nURL:https://github.com/gnehs/ntut-course-crawler-node\n";
             for (const code of course_codes) {
                 const c = courses.find((x: any) => x.code === code);
@@ -176,7 +207,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                     for(const p of periods) {
                          const pt = PERIOD_TIMES[p];
                          if (!pt) continue;
-                         ics += `BEGIN:VEVENT\nUID:${c.code}-${day}-${p}@ntut\nSUMMARY:${c.name.zh}\nRRULE:FREQ=WEEKLY;BYDAY=${DAY_MAP[day]}\nDTSTART:20240902T${pt.s}\nDTEND:20240902T${pt.e}\nLOCATION:${c.classroom.map((cr:any)=>cr.name).join(", ")}\nEND:VEVENT\n`;
+                         ics += `BEGIN:VEVENT\nUID:${c.code}-${day}-${p}@ntut\nSUMMARY:${c.name.zh}\nRRULE:FREQ=WEEKLY;BYDAY=${DAY_MAP[day]}\nDTSTART:${startDateStr}T${pt.s}\nDTEND:${startDateStr}T${pt.e}\nLOCATION:${c.classroom.map((cr:any)=>cr.name).join(", ")}\nEND:VEVENT\n`;
                     }
                 }
             }
