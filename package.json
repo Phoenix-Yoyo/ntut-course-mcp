@@ -1,0 +1,40 @@
+{
+  "name": "ntut-course-mcp",
+  "version": "6.0.0",
+  "description": "An MCP Server for NTUT courses designed for advanced course planning and study abroad credit mapping via AI.",
+  "main": "dist/index.js",
+  "type": "module",
+  "files": [
+    "dist",
+    "LICENSE",
+    "THIRD-PARTY-NOTICES.md",
+    "DATA-DISCLAIMER.md",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc",
+    "license:check": "node scripts/check-licenses.mjs",
+    "start": "node dist/index.js"
+  },
+  "keywords": [
+    "mcp",
+    "ntut",
+    "course",
+    "ai",
+    "claude"
+  ],
+  "author": "Yoyo",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "axios": "^1.20.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.4.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^7.0.2"
+  }
+}

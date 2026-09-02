@@ -1,0 +1,30 @@
+node_modules/
+dist/
+
+# Local environment and logs
+.env
+.env.*
+!.env.example
+*.log
+
+# Generated test, build, and package-manager files
+coverage/
+.nyc_output/
+*.tsbuildinfo
+*.tgz
+.npm/
+.npm-cache-temp/
+.pnpm-store/
+.yarn/cache/
+.yarn/unplugged/
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+# Editor and operating-system files
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local development handover notes
+DEVELOPMENT.md
