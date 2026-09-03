@@ -102,7 +102,7 @@ npm start
 ### 2. Antigravity (AGY)
 請先在終端機進入專案目錄，然後直接輸入：
 ```bash
-agy mcp add ntut-course node ./dist/index.js
+agy mcp add ntut-course node <專案根目錄>/dist/index.js
 ```
 
 ---
