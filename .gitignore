@@ -1,11 +1,28 @@
+# Dependencies & Build Output
 node_modules/
 dist/
 
-# Local environment and logs
+# Environment, Secrets, and Credentials
 .env
 .env.*
+*.env
+*.local
 !.env.example
+*.pem
+*.key
+*.cert
+*.pfx
+id_rsa*
+credentials*.json
+token*.json
+secrets/
+
+# Logs & Diagnostics
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
 # Generated test, build, and package-manager files
 coverage/
@@ -22,9 +39,21 @@ coverage/
 .pnp.*
 
 # Editor and operating-system files
+.vscode/
 .idea/
 .DS_Store
+.DS_Store?
+._*
 Thumbs.db
+ehthumbs.db
+Desktop.ini
+*.swp
+*.swo
 
-# Local development handover notes
+# Local user-generated study plans, exports, and scratch files
+*.ics
+*appendix*.md
 DEVELOPMENT.md
+scratch/
+tmp/
+temp/
