@@ -16,6 +16,7 @@
   },
   "scripts": {
     "build": "tsc",
+    "test": "node examples/test.js && node examples/verify_enhancements.js",
     "license:check": "node scripts/check-licenses.mjs",
     "start": "node dist/index.js"
   },
